@@ -2,7 +2,6 @@
 
 import asyncio
 import can
-import can.interfaces.kvaser
 
 def openstr(dev):
     return f"< open {dev} >"
@@ -57,7 +56,7 @@ def decode_resp(resp):
         ret['id'] = split[1]
         ret['timestamp'] = split[2]
         datastr = split[3]
-        ret['data'] = [int(datastr[i*2:i*2+2]) for i in range(0,int(len(datastr)/2))]
+        ret['data'] = [int(datastr[i*2:i*2+2], 16) for i in range(0,int(len(datastr)/2))]
 
     return ret
 
@@ -131,7 +130,7 @@ async def socketcand_tx(writer, frame):
         idstr = f"{frame['id']:x}"
 
     out_str = '< send '
-    out_str = out_str + ' '.join([idstr, str(len(frame['data'])), ' '.join([str(i) for i in frame['data']])])
+    out_str = out_str + ' '.join([idstr, str(len(frame['data'])), ' '.join([f"{i:02X}" for i in frame['data']])])
     out_str = out_str + ' >'
     writer.write(out_str.encode('utf-8'))
     await writer.drain()
@@ -154,11 +153,11 @@ async def main():
     parser = argparse.ArgumentParser(description='socketcand client')
     parser.add_argument('-a', '--addr', required=False, default = 'localhost')
     parser.add_argument('-p', '--port', required=False, default = 29536)
-    parser.add_argument('-c', '--channel', required=False, default=1)
+    parser.add_argument('-c', '--channel', required=False, default=0)
     args = parser.parse_args()
 
     reader,writer = await asyncio.open_connection(args.addr, args.port)
-    bus = can.interfaces.kvaser.canlib.KvaserBus(args.channel, accept_virtual=True, single_handle=True)
+    bus = can.Bus(interface='kvaser', channel=args.channel, accept_virtual=True, single_handle=True)
 
     await asyncio.gather(socketcand_client(reader, writer, bus), kvaser_client(bus, writer))
 
