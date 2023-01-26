@@ -1,0 +1,5 @@
+msgpack==1.0.4
+packaging==23.0
+python-can @ https://github.com/faisal-shah/python-can/archive/fix-socketcand-extendedid.zip
+typing_extensions==4.4.0
+wrapt==1.14.1
