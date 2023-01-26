@@ -1,0 +1,46 @@
+#!/usr/bin/env -S python
+
+import asyncio
+import can
+import json
+
+def rx_loop_gen (rx_bus, tx_busses):
+    async def loop():
+        reader = can.AsyncBufferedReader()
+        loop = asyncio.get_running_loop()
+        notifier = can.Notifier(rx_bus, [reader], loop=loop)
+        async for msg in reader:
+            for bus in tx_busses:
+                bus.send(msg)
+
+    return loop
+
+
+async def main():
+    import argparse
+    parser = argparse.ArgumentParser(description='python-can gateway')
+    parser.add_argument('config')
+    args = parser.parse_args()
+
+    with open(args.config, 'r') as f:
+        configs = json.load(f)
+
+    if len(configs) < 2:
+        return
+
+    busses = []
+    for cfg in configs:
+        busses.append(can.Bus(**cfg))
+
+    coroutines = []
+    for i in range(0, len(busses)):
+        l = rx_loop_gen(busses[i], [bus for ii,bus in enumerate(busses) if ii!=i])
+        coroutines.append(l())
+
+    await asyncio.gather(*coroutines)
+
+if __name__ == '__main__':
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        pass

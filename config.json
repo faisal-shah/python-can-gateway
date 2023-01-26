@@ -1,0 +1,12 @@
+[
+    {
+        "interface": "socketcand",
+        "host": "localhost",
+        "port": 29536,
+        "channel": "vcan0"
+    },
+    {
+        "interface": "socketcan",
+        "channel": "vcan1"
+    }
+]
