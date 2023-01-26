@@ -6,7 +6,9 @@
         "channel": "vcan0"
     },
     {
-        "interface": "socketcan",
-        "channel": "vcan1"
+        "interface": "kvaser",
+        "channel": "0",
+        "single_handle": true,
+        "accept_virtual": true
     }
 ]

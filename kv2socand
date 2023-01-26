@@ -1,0 +1,67 @@
+#!/usr/bin/env -S python3
+
+import argparse
+import textwrap
+import asyncio
+import logging
+import pycangw
+import socketcand_utils
+import sys
+
+log = logging.getLogger(__name__)
+
+def start_gateway(configs):
+    try:
+        log.info("Starting Gateway")
+        asyncio.run(pycangw.run(configs))
+    except KeyboardInterrupt:
+        pass
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Autodetect socketcand, and create bridge with kvaser"
+    )
+    parser.add_argument("-ch", "--channel", help="Kvaser channel", default="0")
+    parser.add_argument("-addr", "--address", help="socketcand host address", default=None)
+    parser.add_argument("-port", "--port", help="socketcand port", default=None)
+    parser.add_argument("-dev", "--device", help="socketcand device (e.g.  vcan0)", default="vcan0")
+    parser.add_argument("-log", "--loglevel", help="logging level", default="info")
+    args = parser.parse_args()
+
+    logging.basicConfig(level=args.loglevel.upper())
+
+    socketcand_cfg = {
+        "interface": "socketcand",
+        "channel": args.device,
+        "host": args.address,
+        "port": args.port,
+    }
+
+    kvaser_cfg = {
+        "interface": "kvaser",
+        "channel": args.channel,
+        "single_handle": True,
+        "accept_virtual": True,
+    }
+
+    if (args.address is not None) and (args.port is not None):
+        start_gateway([socketcand_cfg, kvaser_cfg])
+    else:
+        log.info("Starting autodetect socketcand")
+
+    devs, host, port = socketcand_utils.detect()
+    if not(devs and host and port):
+        log.warning("socketcand not detected")
+        sys.exit(1)
+
+    if args.device not in devs:
+        log.info(
+            f"Requested device ({args.device}) not found in advertised devices"
+        )
+        sys.exit(1)
+
+    socketcand_cfg['host'] = host
+    socketcand_cfg['port'] = port
+
+    start_gateway([socketcand_cfg, kvaser_cfg])
