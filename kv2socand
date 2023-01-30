@@ -23,6 +23,7 @@ if __name__ == "__main__":
         description="Autodetect socketcand, and create bridge with kvaser"
     )
     parser.add_argument("-ch", "--channel", help="Kvaser channel", default="0")
+    parser.add_argument("-br", "--bitrate", help="Kvaser bitrate", default=1000000)
     parser.add_argument("-addr", "--address", help="socketcand host address", default=None)
     parser.add_argument("-port", "--port", help="socketcand port", default=None)
     parser.add_argument("-dev", "--device", help="socketcand device (e.g.  vcan0)", default="vcan0")
@@ -43,6 +44,7 @@ if __name__ == "__main__":
         "channel": args.channel,
         "single_handle": True,
         "accept_virtual": True,
+        "bitrate": args.bitrate,
     }
 
     if (args.address is not None) and (args.port is not None):
