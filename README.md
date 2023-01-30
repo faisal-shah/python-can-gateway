@@ -45,6 +45,9 @@ Utilities for interacting with socketcand
 ## detect()
 Detects the UDP broadcast from socketcand, and returns the SocketCAN devices, and host:port address where the server is running.
 
+# client.py (don't use)
+Implementation of the socketcand ASCII protocol, and bridge to a python-can device. I wrote this before I found out that python-can already had a (albeit bugy) socketcand interface. Fixed the bugs in python-can and upstreamed the changes - no need to use client.py now .
+
 # Bridging WSL SocketCAN and Windows CAN device
 WSL SocketCAN device <--socketcand--> TCP socket <--kv2socand--> Windows Kvaser Device
 
