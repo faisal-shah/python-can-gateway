@@ -1,5 +1,5 @@
 msgpack==1.0.4
 packaging==23.0
-python-can @ git+https://github.com/hardbyte/python-can.git@73593762d946ad40e83a5b59f82eea4f4757a5de
+python-can @ https://github.com/hardbyte/python-can/archive/develop.zip
 typing_extensions==4.4.0
 wrapt==1.14.1
