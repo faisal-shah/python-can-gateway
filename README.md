@@ -94,7 +94,7 @@ INFO:can.kvaser:Hardware filtering has been disabled
 ```
 
 ## Testing
-Run ```candump -vcan0``` (or whichever interface you are bridging) in WSL.
+Run ```candump vcan0``` (or whichever interface you are bridging) in WSL.
 Run CanKing in windows, and use Messages->Traffic Generator to generate some CAN traffic.
 It should show up in candump
 
