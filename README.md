@@ -79,7 +79,7 @@ Get it from here [https://github.com/faisal-shah/python-can-gateway](https://git
 ```
 > python3 -m venv .venv
 > .venv\Scripts\activate.bat
-> pip install --proxy http://<user>:<pass>@np1prxy801.corp.halliburton.com:80 -r requirements.txt
+> pip install --proxy http://<user>:<pass>@<proxy host> -r requirements.txt
 > python3 kv2socand -ch 1
 INFO:__main__:Starting Gateway
 INFO:can.interfaces.socketcand.socketcand:SocketCanDaemonBus: connected with address ('172.22.160.1', 53900)
