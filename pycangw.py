@@ -1,4 +1,4 @@
-#!/usr/bin/env -S python
+#!/usr/bin/env -S python3
 
 import asyncio
 import can

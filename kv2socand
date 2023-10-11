@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     if args.device not in devs:
         log.info(
-            f"Requested device ({args.device}) not found in advertised devices"
+            f"Requested device ({args.device}) not found in advertised devices ({devs})"
         )
         sys.exit(1)
 
