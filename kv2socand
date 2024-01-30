@@ -37,6 +37,7 @@ if __name__ == "__main__":
         "channel": args.device,
         "host": args.address,
         "port": args.port,
+        "tcp_tune": True,
     }
 
     kvaser_cfg = {
